@@ -5,60 +5,51 @@ using UnityEngine;
 public class AppleTree : MonoBehaviour
 {
     [Header("Inscribed")]
-
-    // Prefab for instantiating apples
     public GameObject applePrefab;
 
-    // Speed at which the AppleTree moves
     public float speed = 1f;
-
-    // Distance where AppleTree turns around
     public float leftAndRightEdge = 10f;
 
-    // Chance that the AppleTree will change directions
-    public float changeDirChance = 0.1f;
+    [Tooltip("Chance per second to change direction (e.g., 0.5 = 50% chance per second)")]
+    public float changeDirChancePerSecond = 0.2f;
 
-    // Seconds between Apples instantiations
     public float appleDropDelay = 1f;
 
     void Start()
     {
-        // Start dropping apples
+        Invoke(nameof(DropApple), 2f);
     }
 
     void Update()
     {
-        // --------------------
-        // Basic Movement
-        // --------------------
+        // Move
         Vector3 pos = transform.position;
         pos.x += speed * Time.deltaTime;
         transform.position = pos;
 
-        // --------------------
-        // Changing Direction
-        // --------------------
+        // Bounce at edges
         if (pos.x < -leftAndRightEdge)
         {
-            speed = Mathf.Abs(speed); // Move right
+            speed = Mathf.Abs(speed); // right
         }
         else if (pos.x > leftAndRightEdge)
         {
-            speed = -Mathf.Abs(speed); // Move left
+            speed = -Mathf.Abs(speed); // left
         }
 
-        // else if (Random.value < changeDirChance)   // a
-        // {
-        //     speed *= -1;                            // Change direction
-        // }
+        // Random direction change (chance per second, frame-rate independent)
+        float chanceThisFrame = changeDirChancePerSecond * Time.deltaTime;
+        if (Random.value < chanceThisFrame)
+        {
+            speed *= -1f;
+        }
     }
 
-    void FixedUpdate()
+    void DropApple()
     {
-        // Random direction changes are now time-based due to FixedUpdate
-        if (Random.value < changeDirChance)
-        {
-            speed *= -1; // Change direction
-        }
+        GameObject apple = Instantiate(applePrefab);
+        apple.transform.position = transform.position;
+
+        Invoke(nameof(DropApple), appleDropDelay);
     }
 }

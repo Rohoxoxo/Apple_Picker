@@ -134,6 +134,8 @@ GameObject:
   - component: {fileID: 519420032}
   - component: {fileID: 519420031}
   - component: {fileID: 519420029}
+  - component: {fileID: 519420033}
+  - component: {fileID: 519420034}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -207,6 +209,34 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &519420033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09abc6b63c03ce64e8f807e97fac6be2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  basketPrefab: {fileID: 8181839904686864630, guid: 3ce4b7143e99d5046b4d2df4d11fa68a, type: 3}
+  numBaskets: 3
+  basketBottomY: -14
+  basketSpacingY: 2
+--- !u!114 &519420034
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32fb17c84da6b7d4ea64afccf925ee0f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &606014835
 GameObject:
   m_ObjectHideFlags: 0
@@ -308,10 +338,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 790041627728605707, guid: ebd50b315e1773947926652ec67da3ff, type: 3}
+      propertyPath: m_IsKinematic
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4168877360847941732, guid: ebd50b315e1773947926652ec67da3ff, type: 3}
       propertyPath: speed
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 4168877360847941732, guid: ebd50b315e1773947926652ec67da3ff, type: 3}
+      propertyPath: applePrefab
+      value: 
+      objectReference: {fileID: 3998713628306975330, guid: c2509699af0d10b4b9a8a20d14583c9d, type: 3}
     - target: {fileID: 4168877360847941732, guid: ebd50b315e1773947926652ec67da3ff, type: 3}
       propertyPath: changeDirChance
       value: 0.02
