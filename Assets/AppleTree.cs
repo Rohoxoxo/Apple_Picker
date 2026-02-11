@@ -38,11 +38,7 @@ public class AppleTree : MonoBehaviour
         }
 
         // Random direction change (chance per second, frame-rate independent)
-        float chanceThisFrame = changeDirChancePerSecond * Time.deltaTime;
-        if (Random.value < chanceThisFrame)
-        {
-            speed *= -1f;
-        }
+    
     }
 
     void DropApple()
@@ -51,5 +47,13 @@ public class AppleTree : MonoBehaviour
         apple.transform.position = transform.position;
 
         Invoke(nameof(DropApple), appleDropDelay);
+    }
+
+    void FixedUpdate()
+    {
+        if (Random.value < changeDirChancePerSecond/50)
+        {
+            speed *= -1f;
+        }
     }
 }
