@@ -11,10 +11,18 @@ public class ApplePicker : MonoBehaviour
     public float basketBottomY = -14f;
     public float basketSpacingY = 2f;
 
+    [Header("Round System")]
+    public int currentRound = 1;
+    public int maxRounds = 4;
+    public TMPro.TextMeshProUGUI roundText;
+
     public List<GameObject> basketList;
 
     void Start()
     {
+        // ✅ Show Round number at start
+        roundText.text = "Round " + currentRound;
+
         basketList = new List<GameObject>();
 
         for (int i = 0; i < numBaskets; i++)
@@ -41,13 +49,9 @@ public class ApplePicker : MonoBehaviour
         }
 
         // Destroy one of the Baskets
-        // Get the index of the last Basket in basketList
         int basketIndex = basketList.Count - 1;
-
-        // Get a reference to that Basket GameObject
         GameObject basketGO = basketList[basketIndex];
 
-        // Remove the Basket from the list and destroy the GameObject
         basketList.RemoveAt(basketIndex);
         Destroy(basketGO);
 
