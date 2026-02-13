@@ -4,56 +4,57 @@ using UnityEngine;
 
 public class AppleTree : MonoBehaviour
 {
-    [Header("Inscribed")]
+    [Header("Apple Settings")]
     public GameObject applePrefab;
+    public GameObject branchPrefab;
+
+    [Range(0f, 1f)]
+    public float branchDropChance = 0.1f; // 10% chance to drop branch
 
     public float speed = 1f;
-    public float leftAndRightEdge = 10f;
-
-    [Tooltip("Chance per second to change direction (e.g., 0.5 = 50% chance per second)")]
-    public float changeDirChancePerSecond = 0.2f;
-
     public float appleDropDelay = 1f;
+
+    private float leftAndRightEdge = 10f;
 
     void Start()
     {
-        Invoke(nameof(DropApple), 2f);
+        Invoke(nameof(DropApple), appleDropDelay);
     }
 
     void Update()
     {
-        // Move
+        // Move left and right
         Vector3 pos = transform.position;
         pos.x += speed * Time.deltaTime;
         transform.position = pos;
 
-        // Bounce at edges
+        // Change direction at screen edges
         if (pos.x < -leftAndRightEdge)
         {
-            speed = Mathf.Abs(speed); // right
+            speed = Mathf.Abs(speed);
         }
         else if (pos.x > leftAndRightEdge)
         {
-            speed = -Mathf.Abs(speed); // left
+            speed = -Mathf.Abs(speed);
         }
-
-        // Random direction change (chance per second, frame-rate independent)
-    
     }
 
     void DropApple()
     {
-        GameObject apple = Instantiate(applePrefab);
-        apple.transform.position = transform.position;
+        GameObject objToDrop;
+
+        // Random chance to drop branch instead
+        if (Random.value < branchDropChance)
+        {
+            objToDrop = Instantiate(branchPrefab);
+        }
+        else
+        {
+            objToDrop = Instantiate(applePrefab);
+        }
+
+        objToDrop.transform.position = transform.position;
 
         Invoke(nameof(DropApple), appleDropDelay);
-    }
-
-    void FixedUpdate()
-    {
-        if (Random.value < changeDirChancePerSecond/50)
-        {
-            speed *= -1f;
-        }
     }
 }

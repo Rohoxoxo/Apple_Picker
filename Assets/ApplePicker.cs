@@ -15,13 +15,17 @@ public class ApplePicker : MonoBehaviour
     public int currentRound = 1;
     public int maxRounds = 4;
     public TMPro.TextMeshProUGUI roundText;
+    public GameObject restartButton;
 
     public List<GameObject> basketList;
 
     void Start()
     {
-        // ✅ Show Round number at start
+        // Show Round number at start
         roundText.text = "Round " + currentRound;
+
+        // Hide Restart button at start
+        restartButton.SetActive(false);
 
         basketList = new List<GameObject>();
 
@@ -40,7 +44,7 @@ public class ApplePicker : MonoBehaviour
 
     public void AppleMissed()
     {
-        // Destroy all of the falling Apples
+        // Destroy all falling apples
         GameObject[] appleArray = GameObject.FindGameObjectsWithTag("Apple");
 
         foreach (GameObject tempGO in appleArray)
@@ -48,17 +52,49 @@ public class ApplePicker : MonoBehaviour
             Destroy(tempGO);
         }
 
-        // Destroy one of the Baskets
+        // Destroy one basket
         int basketIndex = basketList.Count - 1;
         GameObject basketGO = basketList[basketIndex];
 
         basketList.RemoveAt(basketIndex);
         Destroy(basketGO);
 
-        // If there are no Baskets left, restart the game
+        // If no baskets left → next round or game over
         if (basketList.Count == 0)
         {
-            SceneManager.LoadScene("_Scene_0");
+            currentRound++;
+
+            if (currentRound <= maxRounds)
+            {
+                // Update round UI
+                roundText.text = "Round " + currentRound;
+
+                // Respawn baskets
+                for (int i = 0; i < numBaskets; i++)
+                {
+                    GameObject tBasketGO = Instantiate<GameObject>(basketPrefab);
+
+                    Vector3 pos = Vector3.zero;
+                    pos.y = basketBottomY + (basketSpacingY * i);
+
+                    tBasketGO.transform.position = pos;
+
+                    basketList.Add(tBasketGO);
+                }
+            }
+            else
+            {
+                // Game Over
+                roundText.text = "Game Over";
+                restartButton.SetActive(true);
+                Time.timeScale = 0f; // Freeze game
+            }
         }
+    }
+
+    public void RestartGame()
+    {
+        Time.timeScale = 1f; // Unfreeze time
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

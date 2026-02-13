@@ -6,18 +6,19 @@ public class Apple : MonoBehaviour
 {
     public static float bottomY = -20f;
 
-     void Update()
+    void Update()
     {
         if (transform.position.y < bottomY)
         {
-            // Destroy this Apple
+            // Destroy this falling object
             Destroy(this.gameObject);
 
-            // Get a reference to the ApplePicker component of Main Camera
-            ApplePicker apScript = Camera.main.GetComponent<ApplePicker>();
-
-            // Call the public AppleMissed() method of apScript
-            apScript.AppleMissed();
+            // ONLY apples should remove a basket
+            if (CompareTag("Apple"))
+            {
+                ApplePicker apScript = Camera.main.GetComponent<ApplePicker>();
+                apScript.AppleMissed();
+            }
         }
     }
 }

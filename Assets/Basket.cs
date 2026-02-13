@@ -37,6 +37,7 @@ public class Basket : MonoBehaviour
         // Find out what hit this basket
         GameObject collidedWith = coll.gameObject;
 
+        // 🍎 APPLE LOGIC
         if (collidedWith.CompareTag("Apple"))
         {
             Destroy(collidedWith);
@@ -46,6 +47,20 @@ public class Basket : MonoBehaviour
 
             // Attempt to set the high score
             HighScore.TRY_SET_HIGH_SCORE(scoreCounter.score);
+        }
+
+        // 🌿 BRANCH LOGIC (Instant Game Over)
+        if (collidedWith.CompareTag("Branch"))
+        {
+            // Destroy the branch
+            Destroy(collidedWith);
+
+            // Trigger Game Over
+            ApplePicker ap = Camera.main.GetComponent<ApplePicker>();
+            ap.currentRound = ap.maxRounds + 1; // Force game over
+            ap.roundText.text = "Game Over";
+            ap.restartButton.SetActive(true);
+            Time.timeScale = 0f;
         }
     }
 }
