@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;   // This line enables use of uGUI classes like Text.
+using UnityEngine.UI;
 
 public class ScoreCounter : MonoBehaviour
 {
@@ -10,13 +8,13 @@ public class ScoreCounter : MonoBehaviour
 
     private Text uiText;
 
-    void Start()
+    private void Start()
     {
         uiText = GetComponent<Text>();
     }
 
-    void Update()
+    private void Update()
     {
-        uiText.text = score.ToString("#,0");   // This 0 is a zero!
+        uiText.text = score.ToString("#,0");
     }
 }

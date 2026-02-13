@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class AppleTree : MonoBehaviour
@@ -9,26 +7,25 @@ public class AppleTree : MonoBehaviour
     public GameObject branchPrefab;
 
     [Range(0f, 1f)]
-    public float branchDropChance = 0.1f; // 10% chance to drop branch
+    public float branchDropChance = 0.1f;
 
     public float speed = 1f;
     public float appleDropDelay = 1f;
 
     private float leftAndRightEdge = 10f;
 
-    void Start()
+    private void Start()
     {
         Invoke(nameof(DropApple), appleDropDelay);
     }
 
-    void Update()
+    private void Update()
     {
-        // Move left and right
         Vector3 pos = transform.position;
         pos.x += speed * Time.deltaTime;
         transform.position = pos;
 
-        // Change direction at screen edges
+        // Bounce off the edges.
         if (pos.x < -leftAndRightEdge)
         {
             speed = Mathf.Abs(speed);
@@ -39,11 +36,11 @@ public class AppleTree : MonoBehaviour
         }
     }
 
-    void DropApple()
+    private void DropApple()
     {
         GameObject objToDrop;
 
-        // Random chance to drop branch instead
+        // Sometimes drop a branch instead of an apple.
         if (Random.value < branchDropChance)
         {
             objToDrop = Instantiate(branchPrefab);

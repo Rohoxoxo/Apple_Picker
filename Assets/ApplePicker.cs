@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -19,12 +18,9 @@ public class ApplePicker : MonoBehaviour
 
     public List<GameObject> basketList;
 
-    void Start()
+    private void Start()
     {
-        // Show Round number at start
         roundText.text = "Round " + currentRound;
-
-        // Hide Restart button at start
         restartButton.SetActive(false);
 
         basketList = new List<GameObject>();
@@ -35,7 +31,6 @@ public class ApplePicker : MonoBehaviour
 
             Vector3 pos = Vector3.zero;
             pos.y = basketBottomY + (basketSpacingY * i);
-
             tBasketGO.transform.position = pos;
 
             basketList.Add(tBasketGO);
@@ -44,57 +39,52 @@ public class ApplePicker : MonoBehaviour
 
     public void AppleMissed()
     {
-        // Destroy all falling apples
+        // Clear any apples still falling so the next round starts clean.
         GameObject[] appleArray = GameObject.FindGameObjectsWithTag("Apple");
-
         foreach (GameObject tempGO in appleArray)
         {
             Destroy(tempGO);
         }
 
-        // Destroy one basket
+        // Remove one basket (the last one in the list).
         int basketIndex = basketList.Count - 1;
         GameObject basketGO = basketList[basketIndex];
 
         basketList.RemoveAt(basketIndex);
         Destroy(basketGO);
 
-        // If no baskets left → next round or game over
-        if (basketList.Count == 0)
+        // No baskets left -> advance round, or end game.
+        if (basketList.Count != 0) return;
+
+        currentRound++;
+
+        if (currentRound <= maxRounds)
         {
-            currentRound++;
+            roundText.text = "Round " + currentRound;
 
-            if (currentRound <= maxRounds)
+            // Respawn baskets for the new round.
+            for (int i = 0; i < numBaskets; i++)
             {
-                // Update round UI
-                roundText.text = "Round " + currentRound;
+                GameObject tBasketGO = Instantiate<GameObject>(basketPrefab);
 
-                // Respawn baskets
-                for (int i = 0; i < numBaskets; i++)
-                {
-                    GameObject tBasketGO = Instantiate<GameObject>(basketPrefab);
+                Vector3 pos = Vector3.zero;
+                pos.y = basketBottomY + (basketSpacingY * i);
+                tBasketGO.transform.position = pos;
 
-                    Vector3 pos = Vector3.zero;
-                    pos.y = basketBottomY + (basketSpacingY * i);
-
-                    tBasketGO.transform.position = pos;
-
-                    basketList.Add(tBasketGO);
-                }
+                basketList.Add(tBasketGO);
             }
-            else
-            {
-                // Game Over
-                roundText.text = "Game Over";
-                restartButton.SetActive(true);
-                Time.timeScale = 0f; // Freeze game
-            }
+        }
+        else
+        {
+            roundText.text = "Game Over";
+            restartButton.SetActive(true);
+            Time.timeScale = 0f;
         }
     }
 
     public void RestartGame()
     {
-        Time.timeScale = 1f; // Unfreeze time
+        Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }
